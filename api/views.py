@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .models import TODO
+from .serializers import TODOSerializer
 
 # Create your views here.
 
@@ -33,3 +35,15 @@ def getRoutes(request):
         'description': 'Delete existing TODO'
     }]
     return Response(routes)
+
+@api_view(['GET'])
+def getTODOS(request):
+    todos = TODO.objects.all()
+    serializer = TODOSerializer(todos, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getTODO(request, pk):
+    todos = TODO.objects.get(id=pk)
+    serializer = TODOSerializer(todos, many=False)
+    return Response(serializer.data)
