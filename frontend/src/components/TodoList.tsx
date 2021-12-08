@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
       width: "25ch",
     },
   },
+  marginTop: {
+    marginTop: "5px",
+  },
 }));
 
 const TodoList = () => {
@@ -25,7 +28,7 @@ const TodoList = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const createTodo = async () => {
+  const createTodo = async (e?: any) => {
     const response = (await axios.post(
       `http://127.0.0.1:8000/api/todos/create/`,
       { body: JSON.stringify(input) }
@@ -33,6 +36,7 @@ const TodoList = () => {
 
     setTodos([...todos, response.data]);
     setInput("");
+    e.preventDefault();
   };
 
   useEffect(() => {
@@ -55,23 +59,29 @@ const TodoList = () => {
           <Typography>{todo.body}</Typography>
         </Grid>
       ))}
-      <Grid container alignItems="center">
-        <form className={classes.root} noValidate autoComplete="off">
+      <form
+        className={classes.root}
+        noValidate
+        autoComplete="off"
+        onSubmit={createTodo}
+      >
+        <Grid container direction="column">
           <TextField
             id="standard-basic"
             label="Create New TODO"
             onChange={(e) => setInput(e.target.value)}
           />
-        </form>
-        <Button
-          color="primary"
-          variant="outlined"
-          disabled={input === ""}
-          onClick={() => createTodo()}
-        >
-          Create TODO
-        </Button>
-      </Grid>
+          <Button
+            className={classes.marginTop}
+            color="primary"
+            variant="outlined"
+            disabled={input === ""}
+            type="submit"
+          >
+            Create TODO
+          </Button>
+        </Grid>
+      </form>
     </Box>
   );
 };
