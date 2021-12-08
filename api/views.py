@@ -47,3 +47,20 @@ def getTODO(request, pk):
     todos = TODO.objects.get(id=pk)
     serializer = TODOSerializer(todos, many=False)
     return Response(serializer.data)
+
+
+
+@api_view(['DELETE'])
+def deleteTODO(request, pk):
+    todo = TODO.objects.get(id=pk)
+    todo.delete()
+    return Response('Item deleted')
+
+
+@api_view(['POST'])
+def createTODO(request):
+    data = request.data
+    todo = TODO.objects.create(body=data['body'])
+    serializer = TODOSerializer(todo, many=False)
+    return Response(serializer.data)
+
