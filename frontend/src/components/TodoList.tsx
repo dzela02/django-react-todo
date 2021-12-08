@@ -33,7 +33,6 @@ const TodoList = () => {
 
     setTodos([...todos, response.data]);
     setInput("");
-    console.log(response.data);
   };
 
   useEffect(() => {
